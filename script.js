@@ -287,7 +287,7 @@ function initializeContactForm() {
                 email: email,
                 mensaje: mensaje,
                 fecha: new Date().toISOString(),
-                origen: 'Formulario de Contacto - Puffs & Sillones'
+                origen: 'Formulario de Contacto - Pao Deco\'s'
             };
             
             // Enviar datos al webhook de Make
@@ -549,7 +549,7 @@ function formatWhatsAppMessage(customerName, customerPhone) {
         return '';
     }
     
-    let message = '*NUEVO PEDIDO - Puffs & Sillones*\n\n';
+    let message = '*NUEVO PEDIDO - Pao Deco\'s*\n\n';
     
     // Información del cliente
     message += '*DATOS DEL CLIENTE:*\n';
@@ -569,7 +569,7 @@ function formatWhatsAppMessage(customerName, customerPhone) {
     message += '================================\n';
     message += `*TOTAL DEL PEDIDO: $${cartTotal.toFixed(2)}*\n\n`;
     
-    message += 'Gracias por elegir Puffs & Sillones!\n';
+    message += 'Gracias por elegir Pao Deco\'s!\n';
     message += 'Nos pondremos en contacto para coordinar la entrega y el pago.';
     
     return message;
