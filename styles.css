@@ -903,11 +903,32 @@ body {
     font-weight: 600;
     cursor: pointer;
     transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
 }
 
 .checkout-btn:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-medium);
+}
+
+/* Estilos específicos para el botón de WhatsApp */
+.whatsapp-btn {
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+}
+
+.whatsapp-btn:hover {
+    background: linear-gradient(135deg, #128C7E 0%, #075E54 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+}
+
+.whatsapp-btn i {
+    font-size: 1.2rem;
 }
 
 .empty-cart {
@@ -1326,6 +1347,54 @@ html {
 .add-to-cart-modal-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+}
+
+/* Estilos para el formulario del cliente */
+.customer-form {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    border: 1px solid #e9ecef;
+}
+
+.customer-form h4 {
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    color: var(--text-dark);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.form-group input::placeholder {
+    color: #adb5bd;
 }
 
 .continue-shopping-btn {

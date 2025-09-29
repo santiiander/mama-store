@@ -296,7 +296,23 @@
                 <div class="cart-total">
                     <strong>Total: $<span id="cart-total">0.00</span></strong>
                 </div>
-                <button class="checkout-btn">Proceder al Pago</button>
+                
+                <!-- Formulario de datos del cliente -->
+                <div class="customer-form" id="customer-form">
+                    <h4>Datos para el pedido:</h4>
+                    <div class="form-group">
+                        <label for="customer-name">Nombre completo:</label>
+                        <input type="text" id="customer-name" placeholder="Ingresa tu nombre completo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-phone">Teléfono:</label>
+                        <input type="tel" id="customer-phone" placeholder="Ej: +54 9 11 1234-5678" required>
+                    </div>
+                </div>
+                
+                <button class="checkout-btn whatsapp-btn" id="whatsapp-checkout-btn">
+                    <i class="fab fa-whatsapp"></i> Comprar por WhatsApp
+                </button>
             </div>
         </div>
     </div>
@@ -327,12 +343,9 @@
                     </div>
                     <div class="product-features">
                         <h4>Características:</h4>
-                        <ul id="modal-product-features">
-                            <li>Material de alta calidad</li>
-                            <li>Diseño ergonómico</li>
-                            <li>Fácil mantenimiento</li>
-                            <li>Garantía de 2 años</li>
-                        </ul>
+                        <div id="modal-product-features">
+                            <!-- Las características se cargarán dinámicamente desde la API -->
+                        </div>
                     </div>
                     <div class="modal-actions">
                         <button class="add-to-cart-modal-btn" id="modal-add-to-cart">

@@ -37,7 +37,8 @@ async function loadProductsFromAPI() {
             precio: parseFloat(item['Precio producto'] || item.precio || 0),
             imagen: item['img_product'] || item.imagen || '',
             categoria: determineCategory(item['Nombre producto'] || item.nombre || ''),
-            tipo: item['Tipo'] || item.tipo || 'Moderno' // Nueva columna Tipo con valor por defecto
+            tipo: item['Tipo'] || item.tipo || 'Moderno', // Nueva columna Tipo con valor por defecto
+            caracteristicas: item['Caracteristicas'] || item.caracteristicas || '' // Nueva columna Caracteristicas
         }));
         
         console.log('Productos procesados:', productos);
@@ -475,25 +476,83 @@ function initializeAnimations() {
     });
 }
 
-// Checkout function (placeholder)
-function checkout() {
+// Función para formatear el mensaje de WhatsApp
+function formatWhatsAppMessage(customerName, customerPhone) {
     if (cart.length === 0) {
-        alert('Tu carrito está vacío');
+        return '';
+    }
+    
+    let message = '*NUEVO PEDIDO - Puffs & Sillones*\n\n';
+    
+    // Información del cliente
+    message += '*DATOS DEL CLIENTE:*\n';
+    message += `Nombre: ${customerName}\n`;
+    message += `Telefono: ${customerPhone}\n\n`;
+    
+    message += '*DETALLES DEL PEDIDO:*\n';
+    message += '================================\n\n';
+    
+    cart.forEach((item, index) => {
+        message += `${index + 1}. *${item.name}*\n`;
+        message += `   Precio unitario: $${item.price.toFixed(2)}\n`;
+        message += `   Cantidad: ${item.quantity}\n`;
+        message += `   Subtotal: $${(item.price * item.quantity).toFixed(2)}\n\n`;
+    });
+    
+    message += '================================\n';
+    message += `*TOTAL DEL PEDIDO: $${cartTotal.toFixed(2)}*\n\n`;
+    
+    message += 'Gracias por elegir Puffs & Sillones!\n';
+    message += 'Nos pondremos en contacto para coordinar la entrega y el pago.';
+    
+    return message;
+}
+
+// Función para enviar pedido por WhatsApp
+function sendWhatsAppOrder() {
+    // Obtener los datos del formulario
+    const customerName = document.getElementById('customer-name').value.trim();
+    const customerPhone = document.getElementById('customer-phone').value.trim();
+    
+    // Validar que los campos estén completos
+    if (!customerName) {
+        alert('Por favor, ingresa tu nombre completo.');
+        document.getElementById('customer-name').focus();
         return;
     }
     
-    alert(`¡Gracias por tu compra!\nTotal: $${cartTotal.toFixed(2)}\n\nEn una implementación real, aquí se procesaría el pago.`);
+    if (!customerPhone) {
+        alert('Por favor, ingresa tu número de teléfono.');
+        document.getElementById('customer-phone').focus();
+        return;
+    }
     
-    // Clear cart
-    cart = [];
-    updateCartDisplay();
-    saveCartToStorage();
-    closeCartModal();
+    if (cart.length === 0) {
+        alert('Tu carrito está vacío. Agrega productos antes de realizar el pedido.');
+        return;
+    }
+    
+    // Formatear el mensaje con los datos del cliente
+    const message = formatWhatsAppMessage(customerName, customerPhone);
+    
+    // Número de WhatsApp (sin espacios ni guiones)
+    const phoneNumber = '5493472580548';
+    
+    // Crear el enlace de WhatsApp
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    
+    // Abrir WhatsApp
+    window.open(whatsappUrl, '_blank');
+}
+
+// Checkout function (actualizada para usar WhatsApp)
+function checkout() {
+    sendWhatsAppOrder();
 }
 
 // Add checkout event listener
 document.addEventListener('DOMContentLoaded', function() {
-    const checkoutBtn = document.querySelector('.checkout-btn');
+    const checkoutBtn = document.getElementById('whatsapp-checkout-btn');
     if (checkoutBtn) {
         checkoutBtn.addEventListener('click', checkout);
     }
@@ -547,6 +606,28 @@ function openQuickView(productId) {
     document.getElementById('modal-product-type').className = `tipo-badge tipo-${product.tipo.toLowerCase()}`;
     document.getElementById('modal-product-description').textContent = product.descripcion;
     document.getElementById('modal-product-price').textContent = `$${product.precio.toFixed(2)}`;
+    
+    // Cargar características del producto
+    const featuresContainer = document.getElementById('modal-product-features');
+    if (product.caracteristicas && product.caracteristicas.trim()) {
+        // Dividir las características por saltos de línea o comas
+        const caracteristicasArray = product.caracteristicas.split(/[\n,]/).filter(item => item.trim());
+        
+        if (caracteristicasArray.length > 0) {
+            const ul = document.createElement('ul');
+            caracteristicasArray.forEach(caracteristica => {
+                const li = document.createElement('li');
+                li.textContent = caracteristica.trim();
+                ul.appendChild(li);
+            });
+            featuresContainer.innerHTML = '';
+            featuresContainer.appendChild(ul);
+        } else {
+            featuresContainer.innerHTML = '<p>No hay características disponibles</p>';
+        }
+    } else {
+        featuresContainer.innerHTML = '<p>No hay características disponibles</p>';
+    }
     
     // Manejar imagen del producto
     const modalImageContainer = document.getElementById('modal-product-image');
