@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puffs & Sillones - Muebles Cómodos</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <i class="fas fa-couch"></i>
+                    <span>Puffs & Sillones</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#productos">Productos</a></li>
+                    <li><a href="#sobre-nosotros">Sobre Nosotros</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+                <div class="nav-icons">
+                    <div class="cart-icon" id="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cart-count">0</span>
+                    </div>
+                    <div class="hamburger" id="hamburger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero">
+        <div class="hero-content">
+            <h1>Los Puffs Más Cómodos</h1>
+            <p>Descubre nuestra increíble colección de puffs y sillones, perfectos para crear espacios acogedores en tu hogar</p>
+            <button class="cta-button" onclick="scrollToSection('productos')">
+                Ver Productos <i class="fas fa-arrow-down"></i>
+            </button>
+        </div>
+        <div class="hero-image">
+            <div class="floating-puff puff-main">🛋️</div>
+        </div>
+    </section>
+
+    <!-- Productos Section -->
+    <section id="productos" class="productos">
+        <div class="container">
+            <h2 class="section-title">Nuestros Productos</h2>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">Todos</button>
+                <button class="filter-btn" data-filter="clasico">Clásicos</button>
+                <button class="filter-btn" data-filter="moderno">Modernos</button>
+                <button class="filter-btn" data-filter="premium">Premium</button>
+            </div>
+            
+            <div class="productos-grid" id="productos-grid">
+                <!-- Productos Clásicos -->
+                <div class="producto-card" data-category="clasicos">
+                    <div class="producto-image">
+                        <div class="emoji-icon">🪑</div>
+                        <div class="producto-overlay">
+                            <button class="quick-view-btn">Vista Rápida</button>
+                        </div>
+                    </div>
+                    <div class="producto-info">
+                        <h3>Puff Clásico Rosa</h3>
+                        <p>Puff redondo clásico en tela suave rosa pastel, perfecto para cualquier espacio</p>
+                        <div class="precio">$89.99</div>
+                        <button class="add-to-cart-btn" data-id="1" data-name="Puff Clásico Rosa" data-price="89.99">
+                            <i class="fas fa-cart-plus"></i> Agregar al Carrito
+                        </button>
+                    </div>
+                </div>
+
+                <div class="producto-card" data-category="clasicos">
+                    <div class="producto-image">
+                        <div class="emoji-icon">🛋️</div>
+                        <div class="producto-overlay">
+                            <button class="quick-view-btn">Vista Rápida</button>
+                        </div>
+                    </div>
+                    <div class="producto-info">
+                        <h3>Puff Ovalado Lavanda</h3>
+                        <p>Elegante puff ovalado en color lavanda, ideal para relajarse y descansar</p>
+                        <div class="precio">$109.99</div>
+                        <button class="add-to-cart-btn" data-id="2" data-name="Puff Ovalado Lavanda" data-price="109.99">
+                            <i class="fas fa-cart-plus"></i> Agregar al Carrito
+                        </button>
+                    </div>
+                </div>
+
+                <div class="producto-card" data-category="modernos">
+                    <div class="producto-image">
+                        <div class="emoji-icon">🪑</div>
+                        <div class="producto-overlay">
+                            <button class="quick-view-btn">Vista Rápida</button>
+                        </div>
+                    </div>
+                    <div class="producto-info">
+                        <h3>Puff Moderno Menta</h3>
+                        <p>Diseño contemporáneo en color menta con base metálica, estilo y comodidad</p>
+                        <div class="precio">$129.99</div>
+                        <button class="add-to-cart-btn" data-id="3" data-name="Puff Moderno Menta" data-price="129.99">
+                            <i class="fas fa-cart-plus"></i> Agregar al Carrito
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Productos Modernos -->
+                <div class="producto-card" data-category="modernos">
+                    <div class="producto-image">
+                        <div class="emoji-icon">🛋️</div>
+                        <div class="producto-overlay">
+                            <button class="quick-view-btn">Vista Rápida</button>
+                        </div>
+                    </div>
+                    <div class="producto-info">
+                        <h3>Puff Cubo Durazno</h3>
+                        <p>Puff cúbico moderno en tono durazno, perfecto como asiento adicional o mesa</p>
+                        <div class="precio">$95.99</div>
+                        <button class="add-to-cart-btn" data-id="4" data-name="Puff Cubo Durazno" data-price="95.99">
+                            <i class="fas fa-cart-plus"></i> Agregar al Carrito
+                        </button>
+                    </div>
+                </div>
+
+                <div class="producto-card" data-category="modernos">
+                    <div class="producto-image">
+                        <div class="emoji-icon">🪑</div>
+                        <div class="producto-overlay">
+                            <button class="quick-view-btn">Vista Rápida</button>
+                        </div>
+                    </div>
+                    <div class="producto-info">
+                        <h3>Puff Cilíndrico Azul</h3>
+                        <p>Diseño cilíndrico en azul cielo suave, ideal para espacios modernos y juveniles</p>
+                        <div class="precio">$115.99</div>
+                        <button class="add-to-cart-btn" data-id="5" data-name="Puff Cilíndrico Azul" data-price="115.99">
+                            <i class="fas fa-cart-plus"></i> Agregar al Carrito
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Productos Premium -->
+                <div class="producto-card" data-category="premium">
+                    <div class="producto-image">
+                        <div class="emoji-icon">👑</div>
+                        <div class="producto-overlay">
+                            <button class="quick-view-btn">Vista Rápida</button>
+                        </div>
+                    </div>
+                    <div class="producto-info">
+                        <h3>Puff Premium Deluxe</h3>
+                        <p>Puff de lujo con tapizado premium y relleno de alta densidad, máxima comodidad</p>
+                        <div class="precio">$199.99</div>
+                        <button class="add-to-cart-btn" data-id="6" data-name="Puff Premium Deluxe" data-price="199.99">
+                            <i class="fas fa-cart-plus"></i> Agregar al Carrito
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre Nosotros Section -->
+    <section id="sobre-nosotros" class="sobre-nosotros">
+        <div class="container">
+            <div class="sobre-content">
+                <div class="sobre-text">
+                    <h2>Sobre Nosotros</h2>
+                    <p>Somos una empresa familiar especializada en crear los puffs y sillones más cómodos y elegantes. Con más de 10 años de experiencia en muebles, cada pieza es diseñada pensando en tu comodidad y estilo.</p>
+                    <div class="features">
+                        <div class="feature">
+                            <i class="fas fa-heart"></i>
+                            <span>Diseñados con Amor</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-leaf"></i>
+                            <span>Materiales Ecológicos</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-clock"></i>
+                            <span>Calidad Duradera</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="sobre-image">
+                    <div class="chef-emoji">🐸</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto Section -->
+    <section id="contacto" class="contacto">
+        <div class="container">
+            <h2 class="section-title">Contáctanos</h2>
+            <div class="contacto-content">
+                <div class="contacto-info">
+                    <div class="contacto-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h4>Teléfono</h4>
+                            <p>+1 (555) 123-4567</p>
+                        </div>
+                    </div>
+                    <div class="contacto-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email</h4>
+                            <p>info@puffssillones.com</p>
+                        </div>
+                    </div>
+                    <div class="contacto-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Dirección</h4>
+                            <p>123 Calle Principal, Ciudad</p>
+                        </div>
+                    </div>
+                </div>
+                <form class="contacto-form">
+                    <input type="text" placeholder="Tu Nombre" required>
+                    <input type="email" placeholder="Tu Email" required>
+                    <textarea placeholder="Tu Mensaje" rows="5" required></textarea>
+                    <button type="submit">Enviar Mensaje</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="logo">
+                        <i class="fas fa-couch"></i>
+                        <span>Puffs & Sillones</span>
+                    </div>
+                    <p>Los mejores puffs y sillones, diseñados con amor para tu hogar.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Enlaces Rápidos</h4>
+                    <ul>
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="#productos">Productos</a></li>
+                        <li><a href="#sobre-nosotros">Sobre Nosotros</a></li>
+                        <li><a href="#contacto">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Síguenos</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Puffs & Sillones. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Modal -->
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h3>Carrito de Compras</h3>
+                <button class="close-cart" id="close-cart">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="cart-items" id="cart-items">
+                <!-- Cart items will be added here dynamically -->
+                <div class="empty-cart">
+                    <i class="fas fa-couch"></i>
+                    <p>Tu carrito está vacío</p>
+                    <p>¡Agrega algunos puffs hermosos!</p>
+                </div>
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <strong>Total: $<span id="cart-total">0.00</span></strong>
+                </div>
+                <button class="checkout-btn">Proceder al Pago</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick View Modal -->
+    <div id="quick-view-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-product-name">Nombre del Producto</h2>
+                <button class="modal-close" id="close-quick-view">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-image">
+                    <div id="modal-product-image" class="product-image-container">
+                        <div class="emoji-icon" id="modal-emoji">🪑</div>
+                    </div>
+                </div>
+                <div class="modal-details">
+                    <div class="product-type">
+                        <span class="tipo-badge" id="modal-product-type">Moderno</span>
+                    </div>
+                    <div class="product-description">
+                        <p id="modal-product-description">Descripción del producto</p>
+                    </div>
+                    <div class="product-price">
+                        <span class="price-label">Precio:</span>
+                        <span class="price-value" id="modal-product-price">$0.00</span>
+                    </div>
+                    <div class="product-features">
+                        <h4>Características:</h4>
+                        <ul id="modal-product-features">
+                            <li>Material de alta calidad</li>
+                            <li>Diseño ergonómico</li>
+                            <li>Fácil mantenimiento</li>
+                            <li>Garantía de 2 años</li>
+                        </ul>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="add-to-cart-modal-btn" id="modal-add-to-cart">
+                            <i class="fas fa-cart-plus"></i> Agregar al Carrito
+                        </button>
+                        <button class="continue-shopping-btn" id="continue-shopping">
+                            Seguir Comprando
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
