@@ -38,7 +38,8 @@ async function loadProductsFromAPI() {
             imagen: item['img_product'] || item.imagen || '',
             categoria: determineCategory(item['Nombre producto'] || item.nombre || ''),
             tipo: item['Tipo'] || item.tipo || 'Moderno', // Nueva columna Tipo con valor por defecto
-            caracteristicas: item['Caracteristicas'] || item.caracteristicas || '' // Nueva columna Caracteristicas
+            caracteristicas: item['Caracteristicas'] || item.caracteristicas || '', // Nueva columna Caracteristicas
+            stock: parseInt(item['Stock'] || item.stock || 0) // Nueva columna Stock
         }));
         
         console.log('Productos procesados:', productos);
@@ -142,8 +143,21 @@ function renderProducts() {
                 <h3>${producto.nombre}</h3>
                 <p>${producto.descripcion}</p>
                 <div class="precio">$${producto.precio.toFixed(2)}</div>
-                <button class="add-to-cart-btn" data-id="${producto.id}" data-name="${producto.nombre}" data-price="${producto.precio}">
-                    <i class="fas fa-cart-plus"></i> Agregar al Carrito
+                <div class="stock-info ${producto.stock <= 0 ? 'out-of-stock' : producto.stock <= 5 ? 'low-stock' : 'in-stock'}">
+                    ${producto.stock <= 0 ? 
+                        '<i class="fas fa-times-circle"></i> Sin stock' : 
+                        producto.stock <= 5 ? 
+                            `<i class="fas fa-exclamation-triangle"></i> Quedan ${producto.stock}` :
+                            `<i class="fas fa-check-circle"></i> Disponible (${producto.stock})`
+                    }
+                </div>
+                <button class="add-to-cart-btn ${producto.stock <= 0 ? 'disabled' : ''}" 
+                        data-id="${producto.id}" 
+                        data-name="${producto.nombre}" 
+                        data-price="${producto.precio}"
+                        data-stock="${producto.stock}"
+                        ${producto.stock <= 0 ? 'disabled' : ''}>
+                    <i class="fas fa-cart-plus"></i> ${producto.stock <= 0 ? 'Sin stock' : 'Agregar al Carrito'}
                 </button>
             </div>
         `;
@@ -255,25 +269,47 @@ function initializeContactForm() {
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Simple form validation and feedback
-            const inputs = this.querySelectorAll('input, textarea');
-            let isValid = true;
+            // Obtener los datos del formulario
+            const formData = new FormData(this);
+            const nombre = this.querySelector('input[type="text"]').value.trim();
+            const email = this.querySelector('input[type="email"]').value.trim();
+            const mensaje = this.querySelector('textarea').value.trim();
             
-            inputs.forEach(input => {
-                if (!input.value.trim()) {
-                    isValid = false;
-                    input.style.borderColor = '#ff6b6b';
-                } else {
-                    input.style.borderColor = 'var(--secondary-color)';
-                }
-            });
-            
-            if (isValid) {
-                alert('¡Gracias por tu mensaje! Te contactaremos pronto.');
-                this.reset();
-            } else {
+            // Validación simple
+            if (!nombre || !email || !mensaje) {
                 alert('Por favor, completa todos los campos.');
+                return;
             }
+            
+            // Preparar datos para enviar al webhook de Make
+            const webhookData = {
+                nombre: nombre,
+                email: email,
+                mensaje: mensaje,
+                fecha: new Date().toISOString(),
+                origen: 'Formulario de Contacto - Puffs & Sillones'
+            };
+            
+            // Enviar datos al webhook de Make
+            fetch('https://hook.us2.make.com/d9wqrl04kvh25syhxp1vc6fnesx18e8e', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(webhookData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('¡Gracias por tu mensaje! Te contactaremos pronto.');
+                    this.reset();
+                } else {
+                    throw new Error('Error en el envío');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Hubo un problema al enviar tu mensaje. Por favor, intenta nuevamente.');
+            });
         });
     }
 
@@ -301,9 +337,27 @@ function initializeContactForm() {
 
 // Cart Functions
 function addToCart(id, name, price) {
+    // Buscar el producto para verificar stock
+    const product = productos.find(p => p.id === parseInt(id));
+    if (!product) {
+        console.error('Producto no encontrado:', id);
+        return;
+    }
+    
+    // Verificar si hay stock disponible
+    if (product.stock <= 0) {
+        alert('Lo sentimos, este producto está agotado.');
+        return;
+    }
+    
     const existingItem = cart.find(item => item.id === id);
     
     if (existingItem) {
+        // Verificar si agregar uno más excede el stock
+        if (existingItem.quantity >= product.stock) {
+            alert(`Solo tenemos ${product.stock} unidades disponibles de este producto.`);
+            return;
+        }
         existingItem.quantity += 1;
     } else {
         cart.push({
@@ -327,6 +381,19 @@ function removeFromCart(id) {
 function updateQuantity(id, newQuantity) {
     if (newQuantity <= 0) {
         removeFromCart(id);
+        return;
+    }
+    
+    // Buscar el producto para verificar stock
+    const product = productos.find(p => p.id === parseInt(id));
+    if (!product) {
+        console.error('Producto no encontrado:', id);
+        return;
+    }
+    
+    // Verificar si la nueva cantidad excede el stock
+    if (newQuantity > product.stock) {
+        alert(`Solo tenemos ${product.stock} unidades disponibles de este producto.`);
         return;
     }
     
@@ -607,6 +674,17 @@ function openQuickView(productId) {
     document.getElementById('modal-product-description').textContent = product.descripcion;
     document.getElementById('modal-product-price').textContent = `$${product.precio.toFixed(2)}`;
     
+    // Actualizar información de stock
+    const modalStockElement = document.getElementById('modal-product-stock');
+    if (modalStockElement) {
+        modalStockElement.className = `stock-value ${product.stock <= 0 ? 'out-of-stock' : product.stock <= 5 ? 'low-stock' : 'in-stock'}`;
+        modalStockElement.innerHTML = product.stock <= 0 ? 
+            '<i class="fas fa-times-circle"></i> Sin stock' : 
+            product.stock <= 5 ? 
+                `<i class="fas fa-exclamation-triangle"></i> Quedan ${product.stock}` :
+                `<i class="fas fa-check-circle"></i> Disponible (${product.stock})`;
+    }
+    
     // Cargar características del producto
     const featuresContainer = document.getElementById('modal-product-features');
     if (product.caracteristicas && product.caracteristicas.trim()) {
@@ -684,14 +762,25 @@ function openQuickView(productId) {
         // Remover event listeners anteriores
         modalAddToCartBtn.onclick = null;
         
-        // Agregar nuevo event listener
-        modalAddToCartBtn.onclick = function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('Agregando al carrito desde modal:', product.nombre);
-            addToCart(product.id, product.nombre, product.precio);
-            closeQuickView();
-        };
+        // Configurar estado del botón según stock
+        if (product.stock <= 0) {
+            modalAddToCartBtn.disabled = true;
+            modalAddToCartBtn.className = 'add-to-cart-modal-btn disabled';
+            modalAddToCartBtn.innerHTML = '<i class="fas fa-times-circle"></i> Sin stock';
+        } else {
+            modalAddToCartBtn.disabled = false;
+            modalAddToCartBtn.className = 'add-to-cart-modal-btn';
+            modalAddToCartBtn.innerHTML = '<i class="fas fa-cart-plus"></i> Agregar al Carrito';
+            
+            // Agregar nuevo event listener solo si hay stock
+            modalAddToCartBtn.onclick = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Agregando al carrito desde modal:', product.nombre);
+                addToCart(product.id, product.nombre, product.precio);
+                closeQuickView();
+            };
+        }
     }
     
     // Mostrar modal

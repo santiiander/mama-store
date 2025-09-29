@@ -362,6 +362,9 @@ body::-webkit-scrollbar {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
+    justify-items: center; /* Centrar productos cuando hay pocos */
+    max-width: 1200px; /* Limitar el ancho máximo */
+    margin: 0 auto; /* Centrar la grilla */
 }
 
 .producto-card {
@@ -371,6 +374,8 @@ body::-webkit-scrollbar {
     box-shadow: var(--shadow-light);
     transition: var(--transition);
     position: relative;
+    width: 100%; /* Asegurar que las tarjetas mantengan su ancho */
+    max-width: 350px; /* Limitar el ancho máximo de cada tarjeta */
 }
 
 .producto-card:hover {
@@ -493,7 +498,45 @@ body::-webkit-scrollbar {
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+/* Estilos para información de stock */
+.stock-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     margin-bottom: 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.4rem 0.8rem;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stock-disponible {
+    background: linear-gradient(135deg, #a8e6cf 0%, #88d8a3 100%);
+    color: #2d5a3d;
+    border: 1px solid #7bc96f;
+}
+
+.stock-bajo {
+    background: linear-gradient(135deg, #ffd93d 0%, #ff9500 100%);
+    color: #8b4513;
+    border: 1px solid #ff8c00;
+    animation: pulse-warning 2s infinite;
+}
+
+.stock-agotado {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+    color: #8b0000;
+    border: 1px solid #dc3545;
+}
+
+@keyframes pulse-warning {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
 }
 
 .add-to-cart-btn {
@@ -1291,6 +1334,22 @@ html {
     display: flex;
     align-items: center;
     gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* Estilos para stock en el modal */
+.product-stock {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.product-stock .stock-info {
+    margin-bottom: 0;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    border-radius: 15px;
 }
 
 .price-label {
