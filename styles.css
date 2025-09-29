@@ -42,6 +42,14 @@ body {
     color: var(--text-dark);
     background: linear-gradient(45deg, #FFF8DC, #F5F5DC);
     overflow-x: hidden;
+    /* Ocultar scrollbar pero mantener funcionalidad */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+/* Ocultar scrollbar en WebKit browsers (Chrome, Safari, Edge) */
+body::-webkit-scrollbar {
+    display: none;
 }
 
 .container {
@@ -199,6 +207,7 @@ body {
     align-items: center;
     justify-items: start;
     text-align: left;
+    padding-left: 8rem; /* Mover todo el contenido más a la derecha */
 }
 
 .hero-content h1 {
@@ -974,6 +983,7 @@ body {
         text-align: center;
         gap: 2rem;
         justify-items: center;
+        padding-left: 0; /* Remover padding en móviles */
     }
     
     .hero-content h1 {
