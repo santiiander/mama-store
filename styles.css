@@ -215,7 +215,7 @@ body::-webkit-scrollbar {
     display: flex;
     align-items: center;
     background: var(--gradient-neutral);
-    padding: 140px 20px 80px; /* Aumentado padding-top para evitar superposición */
+    padding: 160px 20px 80px; /* Aumentado aún más el padding-top para Android */
     position: relative;
     overflow: visible;
 }
@@ -1148,36 +1148,79 @@ body::-webkit-scrollbar {
     }
     
     .hero {
-        padding: 100px 20px 60px; /* Reducir padding en móviles */
+        padding: 140px 15px 100px; /* Aumentar padding inferior para evitar superposición */
+        min-height: auto; /* Permitir altura automática en móviles */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 40px; /* Añadir margen inferior */
     }
     
     .hero-content {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
         text-align: center;
-        gap: 2rem;
-        justify-items: center;
-        padding-left: 0; /* Remover padding en móviles */
-        padding-right: 0; /* Asegurar simetría */
+        gap: 1.5rem; /* Reducir gap para mejor espaciado */
+        align-items: center;
+        padding: 0 10px; /* Añadir padding lateral consistente */
+        max-width: 100%; /* Asegurar que no se desborde */
+        order: 2; /* Contenido después de la imagen */
     }
     
     .hero-content h1 {
-        font-size: 2.5rem;
+        font-size: 2.2rem; /* Reducir ligeramente para Android */
+        line-height: 1.2; /* Mejorar espaciado de líneas */
+        margin-bottom: 1rem;
+        order: 1; /* Título primero */
+    }
+    
+    .hero-content p {
+        font-size: 1rem; /* Ajustar tamaño de párrafo */
+        margin-bottom: 1.5rem;
+        padding: 0 10px; /* Añadir padding lateral */
+        order: 2; /* Descripción segunda */
+    }
+    
+    .hero-content .cta-button {
+        order: 3; /* Botón al final */
     }
     
     .hero-image {
-        height: 300px;
-        order: -1;
+        height: 200px; /* Reducir altura para mejor visibilidad */
+        order: 1; /* Imagen primero */
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     
     .floating-puff {
-        font-size: 12rem;
-        left: 50%;
+        font-size: 8rem; /* Reducir tamaño para mejor visibilidad */
+        position: static; /* Cambiar de absolute a static en móviles */
+        transform: none; /* Remover transformaciones */
+        left: auto;
+        top: auto;
+        display: block; /* Volver a block para mejor compatibilidad */
+        width: 100%;
+        margin: 0 auto; /* Centrar el contenedor */
+        padding: 20px 0;
+        text-align: center; /* Centrado del texto/emoji */
     }
     
     .sobre-content,
     .contacto-content {
         grid-template-columns: 1fr;
         gap: 2rem;
+        text-align: center; /* Centrar contenido en móviles */
+        padding: 0 10px; /* Añadir padding lateral */
+    }
+    
+    .sobre-text {
+        order: 2; /* Poner texto después de la imagen en móviles */
+    }
+    
+    .sobre-image {
+        order: 1; /* Poner imagen primero en móviles */
     }
     
     .productos-grid {
@@ -1244,18 +1287,48 @@ body::-webkit-scrollbar {
     }
     
     .container {
-        padding: 0 15px;
+        padding: 0 10px; /* Reducir padding del contenedor en móviles pequeños */
+        max-width: 100%; /* Asegurar que no se desborde */
+    }
+    
+    .section-title {
+        font-size: 1.8rem; /* Reducir más el tamaño en móviles pequeños */
+        margin-bottom: 1.5rem;
+        padding: 0 10px; /* Añadir padding lateral */
+    }
+    
+    .productos-grid {
+        padding: 0 5px; /* Reducir padding lateral del grid */
+        gap: 1rem; /* Reducir gap entre productos */
+    }
+    
+    .producto-card {
+        margin: 0 5px; /* Añadir margen lateral mínimo */
+    }
+    
+    .contacto-form {
+        padding: 0 10px; /* Añadir padding al formulario */
     }
     
     .productos,
     .sobre-nosotros,
     .contacto {
-        padding: 60px 15px;
-        margin-top: 20px; /* Añadir separación entre secciones */
+        padding: 40px 15px; /* Reducir padding en móviles pequeños */
+        margin-top: 60px; /* Aumentar separación para evitar superposición */
     }
     
     .productos {
-        padding-top: 40px; /* Reducir padding superior en productos */
+        padding-top: 60px; /* Aumentar padding superior en productos */
+        margin-top: 80px; /* Margen superior específico para productos */
+    }
+    
+    .sobre-text h2 {
+        font-size: 2rem; /* Reducir tamaño de título en móviles */
+    }
+    
+    .sobre-text p {
+        font-size: 1rem; /* Reducir tamaño de texto en móviles */
+        margin-bottom: 1.5rem;
     }
     
     .floating-puff {
