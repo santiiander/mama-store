@@ -6,23 +6,24 @@
 }
 
 :root {
-    /* Colores Pastel */
-    --primary-color: #FFB6C1;      /* Rosa pastel */
-    --secondary-color: #E6E6FA;    /* Lavanda */
-    --accent-color: #F0E68C;       /* Amarillo pastel */
-    --mint-color: #98FB98;         /* Verde menta */
-    --peach-color: #FFDAB9;        /* Durazno */
-    --sky-color: #87CEEB;          /* Azul cielo */
+    /* Colores principales */
+    --primary-color: #8B4B8C;      /* Morado suave */
+    --secondary-color: #D4A5D6;    /* Morado claro */
+    --accent-color: #F4A6CD;       /* Rosa suave */
+    --neutral-color: #E8E8E8;      /* Gris claro */
+    --warm-color: #F5E6D3;         /* Beige cálido */
+    --cool-color: #B8C5D6;         /* Azul grisáceo */
     
     /* Colores de texto */
     --text-dark: #4A4A4A;
     --text-light: #6B6B6B;
     --white: #FFFFFF;
     
-    /* Gradientes */
+    /* Gradientes más sutiles */
     --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    --gradient-accent: linear-gradient(135deg, var(--accent-color), var(--peach-color));
-    --gradient-mint: linear-gradient(135deg, var(--mint-color), var(--sky-color));
+    --gradient-accent: linear-gradient(135deg, var(--accent-color), var(--warm-color));
+    --gradient-neutral: linear-gradient(135deg, var(--neutral-color), var(--cool-color));
+    --gradient-purple: var(--gradient-primary);
     
     /* Sombras */
     --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -30,7 +31,8 @@
     --shadow-heavy: 0 8px 30px rgba(0, 0, 0, 0.2);
     
     /* Fuentes */
-    --font-primary: 'Poppins', sans-serif;
+    --font-primary: 'Inter', sans-serif;
+    --font-heading: 'Inter', sans-serif;
     
     /* Transiciones */
     --transition: all 0.3s ease;
@@ -40,7 +42,7 @@ body {
     font-family: var(--font-primary);
     line-height: 1.6;
     color: var(--text-dark);
-    background: linear-gradient(45deg, #FFF8DC, #F5F5DC);
+    background: var(--warm-color);
     overflow-x: hidden;
     /* Ocultar scrollbar pero mantener funcionalidad */
     scrollbar-width: none; /* Firefox */
@@ -87,7 +89,8 @@ body::-webkit-scrollbar {
     align-items: center;
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--text-dark);
+    color: var(--white);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .logo i {
@@ -104,15 +107,17 @@ body::-webkit-scrollbar {
 
 .nav-menu a {
     text-decoration: none;
-    color: var(--text-dark);
+    color: var(--white);
     font-weight: 500;
     transition: var(--transition);
     position: relative;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .nav-menu a:hover {
     color: var(--accent-color);
     transform: translateY(-2px);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .nav-menu a::after {
@@ -142,8 +147,9 @@ body::-webkit-scrollbar {
     padding: 0.5rem;
     border-radius: 50%;
     background: var(--white);
-    box-shadow: var(--shadow-light);
+    box-shadow: var(--shadow-medium);
     transition: var(--transition);
+    border: 2px solid var(--accent-color);
 }
 
 .cart-icon:hover {
@@ -192,7 +198,7 @@ body::-webkit-scrollbar {
     min-height: 100vh;
     display: flex;
     align-items: center;
-    background: var(--gradient-mint);
+    background: var(--gradient-neutral);
     padding: 120px 20px 80px;
     position: relative;
     overflow: visible;
@@ -216,6 +222,8 @@ body::-webkit-scrollbar {
     color: var(--text-dark);
     margin-bottom: 1rem;
     line-height: 1.2;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: var(--font-heading);
 }
 
 .hero-content p {
@@ -341,21 +349,24 @@ body::-webkit-scrollbar {
 }
 
 .filter-btn {
-    background: transparent;
+    background: var(--white);
     border: 2px solid var(--primary-color);
     color: var(--text-dark);
     padding: 0.8rem 1.5rem;
     border-radius: 25px;
     cursor: pointer;
     transition: var(--transition);
-    font-weight: 500;
+    font-weight: 600;
+    text-shadow: none;
 }
 
 .filter-btn:hover,
 .filter-btn.active {
     background: var(--primary-color);
+    color: var(--white);
     transform: translateY(-2px);
     box-shadow: var(--shadow-light);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .productos-grid {
@@ -486,6 +497,7 @@ body::-webkit-scrollbar {
     font-weight: 600;
     color: var(--text-dark);
     margin-bottom: 0.5rem;
+    font-family: var(--font-heading);
 }
 
 .producto-info p {
@@ -579,15 +591,19 @@ body::-webkit-scrollbar {
 .sobre-text h2 {
     font-size: 2.5rem;
     font-weight: 700;
-    color: var(--text-dark);
+    color: var(--white);
     margin-bottom: 1.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    font-family: var(--font-heading);
 }
 
 .sobre-text p {
     font-size: 1.1rem;
-    color: var(--text-light);
+    color: var(--white);
     margin-bottom: 2rem;
     line-height: 1.8;
+    font-weight: 500;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
 }
 
 .features {
@@ -661,7 +677,7 @@ body::-webkit-scrollbar {
     align-items: center;
     gap: 1rem;
     padding: 1.5rem;
-    background: var(--gradient-mint);
+    background: var(--gradient-accent);
     border-radius: 15px;
     box-shadow: var(--shadow-light);
     transition: var(--transition);
@@ -735,8 +751,8 @@ body::-webkit-scrollbar {
 
 /* Footer */
 .footer {
-    background: var(--text-dark);
-    color: var(--white);
+    background: var(--gradient-neutral);
+    color: var(--text-dark);
     padding: 3rem 20px 1rem;
 }
 
@@ -752,6 +768,8 @@ body::-webkit-scrollbar {
     font-weight: 600;
     margin-bottom: 1rem;
     color: var(--primary-color);
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+    font-family: var(--font-heading);
 }
 
 .footer-section ul {
@@ -763,9 +781,11 @@ body::-webkit-scrollbar {
 }
 
 .footer-section ul li a {
-    color: var(--white);
+    color: var(--text-dark);
     text-decoration: none;
     transition: var(--transition);
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+    font-weight: 600;
 }
 
 .footer-section ul li a:hover {
@@ -784,10 +804,11 @@ body::-webkit-scrollbar {
     width: 40px;
     height: 40px;
     background: var(--primary-color);
-    color: var(--text-dark);
+    color: var(--white);
     border-radius: 50%;
     text-decoration: none;
     transition: var(--transition);
+    box-shadow: var(--shadow-light);
 }
 
 .social-links a:hover {
@@ -798,8 +819,9 @@ body::-webkit-scrollbar {
 .footer-bottom {
     text-align: center;
     padding-top: 2rem;
-    border-top: 1px solid #555;
-    color: #ccc;
+    border-top: 1px solid var(--primary-color);
+    color: var(--text-dark);
+    font-weight: 500;
 }
 
 /* Cart Modal */
@@ -898,7 +920,7 @@ body::-webkit-scrollbar {
 
 .quantity-btn {
     background: var(--primary-color);
-    color: var(--text-dark);
+    color: var(--white);
     border: none;
     width: 30px;
     height: 30px;
@@ -906,6 +928,7 @@ body::-webkit-scrollbar {
     cursor: pointer;
     font-weight: 600;
     transition: var(--transition);
+    box-shadow: var(--shadow-light);
 }
 
 .quantity-btn:hover {
@@ -947,7 +970,7 @@ body::-webkit-scrollbar {
 .checkout-btn {
     width: 100%;
     background: var(--gradient-accent);
-    color: var(--text-dark);
+    color: var(--white);
     border: none;
     padding: 1rem;
     border-radius: 10px;
@@ -959,6 +982,7 @@ body::-webkit-scrollbar {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .checkout-btn:hover {
@@ -1218,7 +1242,7 @@ html {
     align-items: center;
     padding: 2rem;
     border-bottom: 1px solid var(--light-gray);
-    background: var(--gradient-mint);
+    background: var(--gradient-primary);
     border-radius: 20px 20px 0 0;
 }
 
@@ -1313,7 +1337,7 @@ html {
 }
 
 .product-category span {
-    background: var(--gradient-mint);
+    background: var(--gradient-neutral);
     color: var(--text-dark);
     padding: 0.5rem 1rem;
     border-radius: 20px;
@@ -1420,11 +1444,12 @@ html {
 
 /* Estilos para el formulario del cliente */
 .customer-form {
-    background: #f8f9fa;
+    background: var(--white);
     border-radius: 12px;
     padding: 1.5rem;
     margin: 1rem 0;
-    border: 1px solid #e9ecef;
+    border: 2px solid var(--primary-color);
+    box-shadow: var(--shadow-light);
 }
 
 .customer-form h4 {
@@ -1449,21 +1474,24 @@ html {
 .form-group input {
     width: 100%;
     padding: 0.75rem;
-    border: 2px solid #e9ecef;
+    border: 2px solid var(--primary-color);
     border-radius: 8px;
     font-size: 1rem;
     transition: all 0.3s ease;
     box-sizing: border-box;
+    background: var(--white);
+    color: var(--text-dark);
 }
 
 .form-group input:focus {
     outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.2);
 }
 
 .form-group input::placeholder {
-    color: #adb5bd;
+    color: var(--text-light);
+    font-weight: 400;
 }
 
 .continue-shopping-btn {

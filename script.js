@@ -531,15 +531,9 @@ function initializeAnimations() {
             parallax.style.transform = `translateY(${speed}px)`;
         }
         
-        // Header background on scroll
+        // Header background on scroll - mantener color fijo
         const header = document.querySelector('.header');
-        if (scrolled > 100) {
-            header.style.background = 'rgba(255, 182, 193, 0.95)';
-            header.style.backdropFilter = 'blur(10px)';
-        } else {
-            header.style.background = 'var(--gradient-primary)';
-            header.style.backdropFilter = 'blur(10px)';
-        }
+        // Removido el cambio de color, mantiene el estilo original del CSS
     });
 }
 
