@@ -7,28 +7,44 @@
 
 :root {
     /* Colores principales */
-    --primary-color: #8B4B8C;      /* Morado suave */
-    --secondary-color: #D4A5D6;    /* Morado claro */
-    --accent-color: #F4A6CD;       /* Rosa suave */
-    --neutral-color: #E8E8E8;      /* Gris claro */
-    --warm-color: #F5E6D3;         /* Beige cálido */
-    --cool-color: #B8C5D6;         /* Azul grisáceo */
+    --primary-color: #c9a9a6;      /* Taupe rosado */
+    --secondary-color: #b8a9b8;    /* Malva grisáceo */
+    --accent-color: #d4b5a7;       /* Terracota suave */
+    --neutral-color: #f5f1ed;      /* Crema cálido */
+    --warm-color: #faf7f5;         /* Blanco roto */
+    --cool-color: #e8e4e1;         /* Gris perla */
     
     /* Colores de texto */
-    --text-dark: #4A4A4A;
-    --text-light: #6B6B6B;
-    --white: #FFFFFF;
+    --text-dark: #4a4a4a;
+    --text-light: #6b6b6b;
+    --white: #ffffff;
     
-    /* Gradientes más sutiles */
+    /* Gradientes especificados */
     --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     --gradient-accent: linear-gradient(135deg, var(--accent-color), var(--warm-color));
-    --gradient-neutral: linear-gradient(135deg, var(--neutral-color), var(--cool-color));
-    --gradient-purple: var(--gradient-primary);
+    --gradient-neutral: linear-gradient(135deg, var(--neutral-color), #f8f9fa);
+    --gradient-emoji: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-whatsapp: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    --gradient-whatsapp-inverted: linear-gradient(135deg, #128C7E 0%, #25D366 100%);
+    --gradient-light: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     
     /* Sombras */
     --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.1);
     --shadow-medium: 0 4px 20px rgba(0, 0, 0, 0.15);
     --shadow-heavy: 0 8px 30px rgba(0, 0, 0, 0.2);
+    
+    /* Transparencias RGBA */
+    --overlay-modal: rgba(0, 0, 0, 0.6);
+    --overlay-dark: rgba(0, 0, 0, 0.7);
+    --overlay-very-dark: rgba(0, 0, 0, 0.8);
+    --bg-translucent: rgba(255, 255, 255, 0.95);
+    --bg-almost-opaque: rgba(255, 255, 255, 0.98);
+    --hover-white: rgba(255, 255, 255, 0.2);
+    --spinner-white: rgba(255, 255, 255, 0.3);
+    --primary-focus: rgba(201, 169, 166, 0.2);
+    --primary-shadow: rgba(201, 169, 166, 0.4);
+    --whatsapp-shadow: rgba(37, 211, 102, 0.3);
+    --whatsapp-shadow-hover: rgba(37, 211, 102, 0.4);
     
     /* Fuentes */
     --font-primary: 'Inter', sans-serif;
@@ -199,7 +215,7 @@ body::-webkit-scrollbar {
     display: flex;
     align-items: center;
     background: var(--gradient-neutral);
-    padding: 120px 20px 80px;
+    padding: 140px 20px 80px; /* Aumentado padding-top para evitar superposición */
     position: relative;
     overflow: visible;
 }
@@ -478,7 +494,7 @@ body::-webkit-scrollbar {
 }
 
 .tipo-moderno {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--gradient-emoji);
     color: var(--white);
 }
 
@@ -528,22 +544,22 @@ body::-webkit-scrollbar {
 }
 
 .stock-disponible {
-    background: linear-gradient(135deg, #a8e6cf 0%, #88d8a3 100%);
-    color: #2d5a3d;
-    border: 1px solid #7bc96f;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #81c784;
 }
 
 .stock-bajo {
-    background: linear-gradient(135deg, #ffd93d 0%, #ff9500 100%);
-    color: #8b4513;
-    border: 1px solid #ff8c00;
+    background: #fff3e0;
+    color: #e65100;
+    border: 1px solid #ffb74d;
     animation: pulse-warning 2s infinite;
 }
 
 .stock-agotado {
-    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
-    color: #8b0000;
-    border: 1px solid #dc3545;
+    background: #ffebee;
+    color: #c62828;
+    border: 1px solid #e57373;
 }
 
 @keyframes pulse-warning {
@@ -975,7 +991,7 @@ body::-webkit-scrollbar {
 }
 
 .remove-item {
-    background: #ff4757;
+    background: #dc3545;
     color: var(--white);
     border: none;
     border-radius: 8px;
@@ -987,7 +1003,7 @@ body::-webkit-scrollbar {
 }
 
 .remove-item:hover {
-    background: #ff3742;
+    background: #c82333;
     transform: scale(1.05);
 }
 
@@ -1122,6 +1138,7 @@ body::-webkit-scrollbar {
         opacity: 0;
         visibility: hidden;
         transition: var(--transition);
+        z-index: 999; /* Asegurar que esté por debajo del header */
     }
     
     .nav-menu.active {
@@ -1130,12 +1147,17 @@ body::-webkit-scrollbar {
         visibility: visible;
     }
     
+    .hero {
+        padding: 100px 20px 60px; /* Reducir padding en móviles */
+    }
+    
     .hero-content {
         grid-template-columns: 1fr;
         text-align: center;
         gap: 2rem;
         justify-items: center;
         padding-left: 0; /* Remover padding en móviles */
+        padding-right: 0; /* Asegurar simetría */
     }
     
     .hero-content h1 {
@@ -1160,6 +1182,21 @@ body::-webkit-scrollbar {
     
     .productos-grid {
         grid-template-columns: 1fr;
+        gap: 1.5rem; /* Reducir gap en móviles */
+        padding: 0 10px; /* Añadir padding lateral */
+    }
+    
+    .producto-card {
+        max-width: 100%; /* Permitir que las tarjetas usen todo el ancho disponible */
+        margin: 0 auto; /* Centrar las tarjetas */
+    }
+    
+    .producto-info {
+        padding: 1rem; /* Reducir padding en móviles */
+    }
+    
+    .producto-info h3 {
+        font-size: 1.2rem; /* Reducir tamaño de fuente en móviles */
     }
     
     .filter-buttons {
@@ -1203,6 +1240,7 @@ body::-webkit-scrollbar {
     
     .section-title {
         font-size: 2rem;
+        margin-bottom: 2rem; /* Reducir margen en móviles */
     }
     
     .container {
@@ -1213,6 +1251,11 @@ body::-webkit-scrollbar {
     .sobre-nosotros,
     .contacto {
         padding: 60px 15px;
+        margin-top: 20px; /* Añadir separación entre secciones */
+    }
+    
+    .productos {
+        padding-top: 40px; /* Reducir padding superior en productos */
     }
     
     .floating-puff {
@@ -1237,6 +1280,7 @@ body::-webkit-scrollbar {
         margin: 0 auto 2rem auto;
         max-width: 90%;
         flex-wrap: wrap;
+        position: static; /* Remover sticky en móviles muy pequeños */
     }
     
     .filter-btn {

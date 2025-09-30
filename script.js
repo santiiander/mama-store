@@ -136,8 +136,8 @@ function renderProducts() {
                           style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px; position: relative; z-index: 2;" 
                           onerror="console.log('Error cargando imagen:', this.src); this.style.display='none'; this.nextElementSibling.style.display='flex';"
                           onload="console.log('Imagen cargada exitosamente:', this.src); this.nextElementSibling.style.display='none';">
-                     <div class="emoji-icon" style="display: flex; width: 100%; height: 200px; align-items: center; justify-content: center; font-size: 4rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; color: white; position: absolute; top: 0; left: 0; z-index: 1;">${getEmojiForCategory(producto.categoria)}</div>` :
-                    `<div class="emoji-icon" style="width: 100%; height: 200px; display: flex; align-items: center; justify-content: center; font-size: 4rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; color: white;">${getEmojiForCategory(producto.categoria)}</div>`
+                     <div class="emoji-icon" style="display: flex; width: 100%; height: 200px; align-items: center; justify-content: center; font-size: 4rem; background: var(--gradient-emoji); border-radius: 10px; color: white; position: absolute; top: 0; left: 0; z-index: 1;">${getEmojiForCategory(producto.categoria)}</div>` :
+                `<div class="emoji-icon" style="width: 100%; height: 200px; display: flex; align-items: center; justify-content: center; font-size: 4rem; background: var(--gradient-emoji); border-radius: 10px; color: white;">${getEmojiForCategory(producto.categoria)}</div>`
                 }
             </div>
             <div class="producto-overlay">

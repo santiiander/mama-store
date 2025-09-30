@@ -1,0 +1,86 @@
+PALETA DE COLORES - PÁGINA WEB DE MUEBLES
+==========================================
+
+COLORES PRINCIPALES (Variables CSS)
+-----------------------------------
+--primary-color: #c9a9a6      /* Taupe rosado */
+--secondary-color: #b8a9b8     /* Malva grisáceo */
+--accent-color: #d4b5a7        /* Terracota suave */
+--neutral-color: #f5f1ed       /* Crema cálido */
+--warm-color: #faf7f5          /* Blanco roto */
+--cool-color: #e8e4e1          /* Gris perla */
+
+COLORES DE TEXTO
+----------------
+--text-dark: #4a4a4a           /* Texto oscuro principal */
+--text-light: #6b6b6b          /* Texto claro secundario */
+--white: #ffffff               /* Blanco puro */
+
+COLORES DE ESTADO (Stock)
+-------------------------
+#e8f5e9                        /* Fondo verde claro - En stock */
+#2e7d32                        /* Verde oscuro - Texto en stock */
+#81c784                        /* Verde medio - Borde en stock */
+
+#fff3e0                        /* Fondo naranja claro - Poco stock */
+#e65100                        /* Naranja oscuro - Texto poco stock */
+#ffb74d                        /* Naranja medio - Borde poco stock */
+
+#ffebee                        /* Fondo rojo claro - Sin stock */
+#c62828                        /* Rojo oscuro - Texto sin stock */
+#e57373                        /* Rojo medio - Borde sin stock */
+
+COLORES DE BOTONES Y ACCIONES
+------------------------------
+#25D366                        /* Verde WhatsApp */
+#128C7E                        /* Verde WhatsApp oscuro (hover) */
+#dc3545                        /* Rojo eliminar */
+#c82333                        /* Rojo eliminar hover */
+#4CAF50                        /* Verde éxito */
+#bdbdbd                        /* Gris deshabilitado */
+
+COLORES DE FONDO Y ESTRUCTURA
+------------------------------
+#fafafa                        /* Fondo gris muy claro */
+#f5f5f5                        /* Fondo gris claro hover */
+#f0f0f0                        /* Bordes grises */
+#f8f9fa                        /* Fondo gradiente claro */
+#e9ecef                        /* Gris medio */
+#adb5bd                        /* Gris texto deshabilitado */
+
+GRADIENTES UTILIZADOS
+---------------------
+linear-gradient(135deg, #667eea 0%, #764ba2 100%)    /* Gradiente azul-morado (emojis) */
+linear-gradient(135deg, #25D366 0%, #128C7E 100%)    /* Gradiente WhatsApp */
+linear-gradient(135deg, #128C7E 0%, #25D366 100%)    /* Gradiente WhatsApp invertido */
+linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)    /* Gradiente gris claro */
+linear-gradient(135deg, var(--neutral-color) 0%, #f8f9fa 100%)  /* Gradiente neutro */
+
+COLORES CON TRANSPARENCIA (RGBA)
+--------------------------------
+rgba(0, 0, 0, 0.1)             /* Negro 10% - Sombras ligeras */
+rgba(0, 0, 0, 0.15)            /* Negro 15% - Sombras medias */
+rgba(0, 0, 0, 0.2)             /* Negro 20% - Sombras pesadas */
+rgba(0, 0, 0, 0.6)             /* Negro 60% - Overlay modal */
+rgba(0, 0, 0, 0.7)             /* Negro 70% - Overlay oscuro */
+rgba(0, 0, 0, 0.8)             /* Negro 80% - Overlay muy oscuro */
+
+rgba(255, 255, 255, 0.95)      /* Blanco 95% - Fondo translúcido */
+rgba(255, 255, 255, 0.98)      /* Blanco 98% - Fondo casi opaco */
+rgba(255, 255, 255, 0.2)       /* Blanco 20% - Hover botones */
+rgba(255, 255, 255, 0.3)       /* Blanco 30% - Loading spinner */
+
+rgba(201, 169, 166, 0.2)       /* Primary color 20% - Focus/hover */
+rgba(201, 169, 166, 0.4)       /* Primary color 40% - Sombras botones */
+rgba(37, 211, 102, 0.3)        /* WhatsApp 30% - Sombras */
+rgba(37, 211, 102, 0.4)        /* WhatsApp 40% - Sombras hover */
+rgba(139, 69, 19, 0.1)         /* Marrón 10% - Focus inputs */
+rgba(139, 69, 19, 0.3)         /* Marrón 30% - Sombras */
+
+NOTAS DE DISEÑO
+---------------
+- La paleta principal está basada en tonos pasteles elegantes
+- Se utilizan colores cálidos y neutros para crear una sensación acogedora
+- Los colores de estado siguen convenciones estándar (verde=bueno, naranja=advertencia, rojo=error)
+- Los gradientes se usan principalmente para elementos decorativos y emojis
+- Las transparencias se emplean para overlays, sombras y efectos de hover
