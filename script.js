@@ -112,6 +112,11 @@ function renderProducts() {
         return;
     }
     
+    if (productos.length === 0) {
+        productosGrid.innerHTML = '<p>No hay productos disponibles en este momento.</p>';
+        return;
+    }
+    
     // Limpiar productos existentes
     productosGrid.innerHTML = '';
     
@@ -234,6 +239,26 @@ function initializeEventListeners() {
         });
     });
 
+    // Event delegation para botones del carrito
+    if (cartItems) {
+        cartItems.addEventListener('click', function(e) {
+            const target = e.target.closest('button');
+            if (!target) return;
+
+            const itemId = target.getAttribute('data-id');
+            
+            if (target.classList.contains('decrease-btn')) {
+                const newQuantity = parseInt(target.getAttribute('data-quantity'));
+                updateQuantity(itemId, newQuantity);
+            } else if (target.classList.contains('increase-btn')) {
+                const newQuantity = parseInt(target.getAttribute('data-quantity'));
+                updateQuantity(itemId, newQuantity);
+            } else if (target.classList.contains('remove-item')) {
+                removeFromCart(itemId);
+            }
+        });
+    }
+
     // Inicializar event listeners de productos
     initializeProductEventListeners();
 }
@@ -243,20 +268,33 @@ function initializeProductEventListeners() {
     // Add to cart buttons
     const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
     addToCartButtons.forEach(btn => {
+        // Remover event listeners anteriores para evitar duplicados
+        btn.replaceWith(btn.cloneNode(true));
+    });
+    
+    // Volver a seleccionar los botones después del clonado
+    const newAddToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+    newAddToCartButtons.forEach(btn => {
         btn.addEventListener('click', function() {
+            if (this.disabled) return;
+            
             const id = this.getAttribute('data-id');
             const name = this.getAttribute('data-name');
             const price = parseFloat(this.getAttribute('data-price'));
             
+            console.log('Agregando al carrito:', { id, name, price });
             addToCart(id, name, price);
             
             // Visual feedback
+            const originalContent = this.innerHTML;
             this.innerHTML = '<i class="fas fa-check"></i> ¡Agregado!';
-            this.style.background = 'var(--mint-color)';
+            this.style.background = '#4CAF50';
+            this.disabled = true;
             
             setTimeout(() => {
-                this.innerHTML = '<i class="fas fa-cart-plus"></i> Agregar al Carrito';
+                this.innerHTML = originalContent;
                 this.style.background = '';
+                this.disabled = false;
             }, 1500);
         });
     });
@@ -406,41 +444,56 @@ function updateQuantity(id, newQuantity) {
 }
 
 function updateCartDisplay() {
-    // Update cart count
+    const cartItemsContainer = document.getElementById('cart-items');
+    const cartTotalElement = document.getElementById('cart-total');
+    const cartCountElement = document.getElementById('cart-count');
+    
+    if (!cartItemsContainer || !cartTotalElement || !cartCountElement) {
+        console.error('Elementos del carrito no encontrados en el DOM');
+        return;
+    }
+    
+    // Actualizar contador del carrito
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    cartCount.textContent = totalItems;
+    cartCountElement.textContent = totalItems;
     
-    // Update cart total
-    cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    cartTotalElement.textContent = cartTotal.toFixed(2);
-    
-    // Update cart items display
+    // Si el carrito está vacío
     if (cart.length === 0) {
-        cartItems.innerHTML = `
+        cartItemsContainer.innerHTML = `
             <div class="empty-cart">
                 <i class="fas fa-shopping-cart"></i>
                 <p>Tu carrito está vacío</p>
-                <p>¡Agrega algunos puffs hermosos!</p>
             </div>
         `;
-    } else {
-        cartItems.innerHTML = cart.map(item => `
-            <div class="cart-item">
-                <div class="cart-item-info">
-                    <h4>${item.name}</h4>
-                    <div class="cart-item-price">$${item.price.toFixed(2)}</div>
-                </div>
-                <div class="quantity-controls">
-                    <button class="quantity-btn" onclick="updateQuantity('${item.id}', ${item.quantity - 1})">-</button>
-                    <span class="quantity">${item.quantity}</span>
-                    <button class="quantity-btn" onclick="updateQuantity('${item.id}', ${item.quantity + 1})">+</button>
-                </div>
-                <button class="remove-item" onclick="removeFromCart('${item.id}')">
-                    <i class="fas fa-trash"></i>
+        cartTotalElement.innerHTML = '<h4>Total: <span class="total-amount">$0</span></h4>';
+        return;
+    }
+    
+    // Renderizar items del carrito (SIN onclick inline)
+    cartItemsContainer.innerHTML = cart.map(item => `
+        <div class="cart-item">
+            <div class="cart-item-info">
+                <h4>${item.name}</h4>
+                <div class="cart-item-price">$${item.price.toFixed(2)}</div>
+            </div>
+            <div class="quantity-controls">
+                <button class="quantity-btn decrease-btn" data-id="${item.id}" data-quantity="${item.quantity - 1}">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <span class="quantity-display">${item.quantity}</span>
+                <button class="quantity-btn increase-btn" data-id="${item.id}" data-quantity="${item.quantity + 1}">
+                    <i class="fas fa-plus"></i>
                 </button>
             </div>
-        `).join('');
-    }
+            <button class="remove-item" data-id="${item.id}">
+                <i class="fas fa-trash"></i> Eliminar
+            </button>
+        </div>
+    `).join('');
+    
+    // Calcular y mostrar total
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    cartTotalElement.innerHTML = `<h4>Total: <span class="total-amount">$${total.toFixed(2)}</span></h4>`;
 }
 
 function openCart() {
