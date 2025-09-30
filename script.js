@@ -127,9 +127,20 @@ const CartManager = {
 
     // Agregar producto al carrito
     addToCart: (product) => {
+        // Verificar si hay stock disponible
+        if (product.stock <= 0) {
+            Utils.showToast('Sin stock', 'Este producto no está disponible', 'error');
+            return;
+        }
+
         const existingItem = AppState.cart.find(item => item.id === product.id);
         
         if (existingItem) {
+            // Verificar si agregar uno más excede el stock
+            if (existingItem.quantity >= product.stock) {
+                Utils.showToast('Stock insuficiente', `Solo quedan ${product.stock} unidades disponibles`, 'error');
+                return;
+            }
             existingItem.quantity += 1;
         } else {
             AppState.cart.push({
@@ -450,25 +461,56 @@ const ProductManager = {
             return;
         }
 
-        productsContainer.innerHTML = filteredProducts.map(product => `
-            <div class="product-card">
-                <img src="${product.image}" alt="${product.name}" class="product-image" />
-                <div class="product-content">
-                    <div class="product-category">${product.category}</div>
-                    <h3 class="product-name">${product.name}</h3>
-                    <p class="product-description">${product.description}</p>
-                    <div class="product-footer">
-                        <span class="product-price">${Utils.formatPrice(product.price)}</span>
-                        <button 
-                            class="add-to-cart-btn" 
-                            onclick="CartManager.addToCart(${JSON.stringify(product).replace(/"/g, '&quot;')})"
-                        >
-                            Agregar
-                        </button>
+        productsContainer.innerHTML = filteredProducts.map(product => {
+            // Determinar el color y texto del stock
+            let stockClass = '';
+            let stockText = '';
+            let stockIcon = '';
+            
+            if (product.stock <= 0) {
+                stockClass = 'stock-out';
+                stockText = 'Sin stock';
+                stockIcon = '❌';
+            } else if (product.stock <= 3) {
+                stockClass = 'stock-low';
+                stockText = `Quedan ${product.stock}`;
+                stockIcon = '⚠️';
+            } else if (product.stock <= 8) {
+                stockClass = 'stock-medium';
+                stockText = `Stock: ${product.stock}`;
+                stockIcon = '⚡';
+            } else {
+                stockClass = 'stock-high';
+                stockText = `Stock: ${product.stock}`;
+                stockIcon = '✅';
+            }
+            
+            return `
+                <div class="product-card">
+                    <img src="${product.image}" alt="${product.name}" class="product-image" />
+                    <div class="product-content">
+                        <div class="product-category">${product.category}</div>
+                        <h3 class="product-name">${product.name}</h3>
+                        <p class="product-description">${product.description}</p>
+                        <div class="product-stock">
+                            <span class="stock-indicator ${stockClass}">
+                                ${stockIcon} ${stockText}
+                            </span>
+                        </div>
+                        <div class="product-footer">
+                            <span class="product-price">${Utils.formatPrice(product.price)}</span>
+                            <button 
+                                class="add-to-cart-btn ${product.stock <= 0 ? 'disabled' : ''}" 
+                                onclick="CartManager.addToCart(${JSON.stringify(product).replace(/"/g, '&quot;')})"
+                                ${product.stock <= 0 ? 'disabled' : ''}
+                            >
+                                ${product.stock <= 0 ? 'Sin stock' : 'Agregar'}
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
         
         productsContainer.classList.remove('hidden');
     }
