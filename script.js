@@ -1,4 +1,6 @@
 // Pao Deco's - E-commerce JavaScript
+console.log('Versión final');
+
 // Estado global de la aplicación
 const AppState = {
     cart: [],
@@ -11,7 +13,7 @@ const AppState = {
 
 // Configuración de la API
 const API_CONFIG = {
-    SHEETSDB_API_URL: "https://sheetdb.io/api/v1/2su9b1nwyjo5q"
+    GOOGLE_SHEETS_CSV_URL: "https://docs.google.com/spreadsheets/d/1eSAuZwioc0cnI7cu5H2VACSKP2tAH8g6bauOmH2vqYA/export?format=csv&gid=0"
 };
 
 // Utilidades
@@ -44,62 +46,177 @@ const Utils = {
 
     // Convertir URLs de Google Drive al formato correcto
     convertGoogleDriveUrl: (url) => {
-        if (!url) return url;
+        if (!url || url.trim() === '') {
+            return url;
+        }
+        
+        const cleanUrl = url.trim();
         
         // Si es solo un ID de Google Drive (sin https://)
-        if (url.length > 20 && url.length < 50 && !url.includes('http') && !url.includes('.')) {
-            // Intentar múltiples formatos de Google Drive
-            return `https://drive.google.com/thumbnail?id=${url}&sz=w400-h400`;
+        if (cleanUrl.length > 20 && cleanUrl.length < 50 && !cleanUrl.includes('http') && !cleanUrl.includes('.')) {
+            // Usar formato directo de imagen que evita el bloqueo ORB
+            const convertedUrl = `https://drive.google.com/thumbnail?id=${cleanUrl}&sz=w400-h300`;
+            return convertedUrl;
         }
         
-        // Si es un enlace de Google Drive, convertirlo al formato de visualización directa
-        if (url.includes('drive.google.com')) {
-            // Extraer el ID del archivo de diferentes formatos de URL de Google Drive
-            let fileId = null;
-            
-            // Formato: https://drive.google.com/uc?export=view&id=FILE_ID
-            if (url.includes('id=')) {
-                fileId = url.split('id=')[1].split('&')[0];
-            }
-            // Formato: https://drive.google.com/file/d/FILE_ID/view
-            else if (url.includes('/file/d/')) {
-                fileId = url.split('/file/d/')[1].split('/')[0];
-            }
-            
-            // Si encontramos el ID, usar el formato de thumbnail
+        // Si es una URL de Google Drive completa con /file/d/
+        if (cleanUrl.includes('drive.google.com/file/d/')) {
+            const fileId = cleanUrl.match(/\/d\/([a-zA-Z0-9-_]+)/);
             if (fileId) {
-                return `https://drive.google.com/thumbnail?id=${fileId}&sz=w400-h400`;
+                // Usar formato thumbnail que funciona mejor para imágenes
+                const convertedUrl = `https://drive.google.com/thumbnail?id=${fileId[1]}&sz=w400-h300`;
+                return convertedUrl;
             }
         }
         
-        // Si no es de Google Drive, devolver la URL original
-        return url;
+        // Si es una URL de Google Drive con /open?id=
+        if (cleanUrl.includes('drive.google.com/open?id=')) {
+            const fileId = cleanUrl.match(/id=([a-zA-Z0-9-_]+)/);
+            if (fileId) {
+                const convertedUrl = `https://drive.google.com/thumbnail?id=${fileId[1]}&sz=w400-h300`;
+                return convertedUrl;
+            }
+        }
+        
+        // Si ya está en formato thumbnail, mantenerla
+        if (cleanUrl.includes('drive.google.com/thumbnail')) {
+            return cleanUrl;
+        }
+        
+        // Si ya está en formato uc?export=view, intentar convertir a thumbnail
+        if (cleanUrl.includes('drive.google.com/uc?export=view')) {
+            const fileId = cleanUrl.match(/id=([a-zA-Z0-9-_]+)/);
+            if (fileId) {
+                const convertedUrl = `https://drive.google.com/thumbnail?id=${fileId[1]}&sz=w400-h300`;
+                return convertedUrl;
+            }
+            return cleanUrl;
+        }
+        
+        // Si es otra URL válida (http/https), devolverla tal como está
+        if (cleanUrl.startsWith('http')) {
+            return cleanUrl;
+        }
+        
+        return cleanUrl;
     },
 
-    // Mostrar toast notification
+    // Parsear CSV de Google Sheets
+    parseCSV: (csvText) => {
+        // Dividir por líneas pero mantener las que están dentro de comillas
+        const lines = [];
+        let currentLine = '';
+        let insideQuotes = false;
+        
+        for (let i = 0; i < csvText.length; i++) {
+            const char = csvText[i];
+            
+            if (char === '"') {
+                insideQuotes = !insideQuotes;
+                currentLine += char;
+            } else if (char === '\n' && !insideQuotes) {
+                if (currentLine.trim()) {
+                    lines.push(currentLine.trim());
+                }
+                currentLine = '';
+            } else {
+                currentLine += char;
+            }
+        }
+        
+        // Agregar la última línea si no está vacía
+        if (currentLine.trim()) {
+            lines.push(currentLine.trim());
+        }
+        
+        if (lines.length < 2) {
+            return [];
+        }
+        
+        // Parsear la primera línea para obtener headers
+        const headerLine = lines[0];
+        const headers = [];
+        let current = '';
+        let inQuotes = false;
+        
+        for (let i = 0; i < headerLine.length; i++) {
+            const char = headerLine[i];
+            if (char === '"') {
+                inQuotes = !inQuotes;
+            } else if (char === ',' && !inQuotes) {
+                headers.push(current.trim().replace(/"/g, ''));
+                current = '';
+            } else {
+                current += char;
+            }
+        }
+        headers.push(current.trim().replace(/"/g, ''));
+        
+        const data = [];
+
+        for (let i = 1; i < lines.length; i++) {
+            const line = lines[i];
+            
+            if (line) {
+                // Parsear CSV considerando comillas y comas dentro de campos
+                const values = [];
+                let current = '';
+                let inQuotes = false;
+                
+                for (let j = 0; j < line.length; j++) {
+                    const char = line[j];
+                    if (char === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (char === ',' && !inQuotes) {
+                        values.push(current.trim().replace(/"/g, ''));
+                        current = '';
+                    } else {
+                        current += char;
+                    }
+                }
+                values.push(current.trim().replace(/"/g, ''));
+
+                // Crear objeto con headers como claves
+                const row = {};
+                headers.forEach((header, index) => {
+                    row[header] = values[index] || '';
+                });
+                
+                // Solo agregar productos que tengan al menos nombre y precio
+                const nombreProducto = row['Nombre producto'] || row['nombre producto'] || '';
+                const precioProducto = row['Precio producto'] || row['precio producto'] || '';
+                
+                if (nombreProducto.trim() && precioProducto.trim()) {
+                    data.push(row);
+                }
+            }
+        }
+        
+        return data;
+    },
+
+    // Mostrar notificación toast
     showToast: (title, description, type = 'success') => {
+        // Crear elemento toast
         const toast = document.createElement('div');
-        toast.className = 'toast';
+        toast.className = `toast toast-${type}`;
         toast.innerHTML = `
             <div class="toast-content">
-                <div class="toast-icon">${type === 'success' ? '✅' : '❌'}</div>
-                <div>
-                    <div class="toast-title">${title}</div>
-                    <div class="toast-description">${description}</div>
-                </div>
+                <div class="toast-title">${title}</div>
+                <div class="toast-description">${description}</div>
             </div>
+            <button class="toast-close" onclick="this.parentElement.remove()">×</button>
         `;
-        
+
+        // Agregar al DOM
         document.body.appendChild(toast);
-        
-        // Mostrar toast
-        setTimeout(() => toast.classList.add('show'), 100);
-        
-        // Ocultar y remover toast
+
+        // Auto-remover después de 5 segundos
         setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => document.body.removeChild(toast), 300);
-        }, 3000);
+            if (toast.parentElement) {
+                toast.remove();
+            }
+        }, 5000);
     }
 };
 
@@ -329,43 +446,64 @@ const CartManager = {
 
 // Gestión de productos
 const ProductManager = {
-    // Cargar productos desde la API
+    // Cargar productos desde Google Sheets directamente
     loadProducts: async () => {
         AppState.isLoading = true;
         AppState.error = null;
         ProductManager.updateProductsUI();
 
         try {
-            console.log('Cargando productos desde:', API_CONFIG.SHEETSDB_API_URL);
-            const response = await fetch(API_CONFIG.SHEETSDB_API_URL);
+            const response = await fetch(API_CONFIG.GOOGLE_SHEETS_CSV_URL);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             
-            const data = await response.json();
-            console.log('Datos recibidos de la API:', data);
+            const csvText = await response.text();
             
-            // Procesar y validar datos con las columnas correctas de SheetDB
-            AppState.products = data.map(item => ({
-                id: Utils.generateId(),
-                name: item['Nombre producto'] || 'Producto sin nombre',
-                price: parseFloat(item['Precio producto']) || 0,
-                category: item['Tipo'] || 'general',
-                description: item['Descripción producto'] || 'Sin descripción disponible',
-                characteristics: item['Caracteristicas'] || '',
-                image: Utils.convertGoogleDriveUrl(item['img_product']) || 'https://via.placeholder.com/300x200?text=Sin+Imagen',
-                stock: parseInt(item['Stock']) || 0
-            }));
+            // Parsear CSV usando nuestra función personalizada
+            const data = Utils.parseCSV(csvText);
             
-            console.log('Productos procesados:', AppState.products);
+            // Procesar y validar datos con las columnas de Google Sheets
+            AppState.products = data
+                .filter(item => item['Nombre producto'] && item['Nombre producto'].trim()) // Filtrar filas vacías
+                .map(item => {
+                    const originalImageUrl = item['img_product'] || '';
+                    const convertedImageUrl = Utils.convertGoogleDriveUrl(originalImageUrl) || 'https://via.placeholder.com/300x200?text=Sin+Imagen';
+                    
+                    return {
+                        id: Utils.generateId(),
+                        name: item['Nombre producto'] || 'Producto sin nombre',
+                        description: item['Descripción producto'] || 'Sin descripción disponible',
+                        characteristics: item['Caracteristicas'] || item['Características'] || '',
+                        price: parseFloat(item['Precio producto']) || 0,
+                        image: convertedImageUrl,
+                        category: item['Tipo'] || 'general',
+                        stock: parseInt(item['Stock']) || 0
+                    };
+                });
+            
             AppState.isLoading = false;
             ProductManager.updateProductsUI();
             
+            // Mostrar notificación de éxito
+            Utils.showToast(
+                'Productos cargados',
+                `Se cargaron ${AppState.products.length} productos correctamente`,
+                'success'
+            );
+            
         } catch (error) {
-            console.error('Error loading products:', error);
+            console.error('❌ Error loading products:', error);
             AppState.error = 'Error al cargar los productos. Por favor, intenta nuevamente.';
             AppState.isLoading = false;
             ProductManager.updateProductsUI();
+            
+            // Mostrar notificación de error
+            Utils.showToast(
+                'Error al cargar productos',
+                'No se pudieron cargar los productos. Verifica tu conexión a internet.',
+                'error'
+            );
         }
     },
 
@@ -426,7 +564,9 @@ const ProductManager = {
         const loadingState = document.querySelector('#productsLoading');
         const errorState = document.querySelector('#productsError');
         
-        if (!productsContainer) return;
+        if (!productsContainer) {
+            return;
+        }
 
         // Ocultar todos los estados
         if (loadingState) loadingState.classList.add('hidden');
@@ -487,7 +627,12 @@ const ProductManager = {
             
             return `
                 <div class="product-card">
-                    <img src="${product.image}" alt="${product.name}" class="product-image" />
+                    <img 
+                        src="${product.image}" 
+                        alt="${product.name}" 
+                        class="product-image"
+                        onerror="this.onerror=null; this.src='https://via.placeholder.com/300x200/f0f0f0/666666?text=Sin+Imagen';"
+                    />
                     <div class="product-content">
                         <div class="product-category">${product.category}</div>
                         <h3 class="product-name">${product.name}</h3>
@@ -520,8 +665,6 @@ const ProductManager = {
 const PageManager = {
     // Mostrar página específica
     showPage: (pageName) => {
-        console.log('Showing page:', pageName); // Debug log
-        
         // Ocultar todas las páginas
         document.querySelectorAll('.page').forEach(page => {
             page.classList.remove('active');
@@ -606,8 +749,6 @@ const MobileNavManager = {
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM loaded, initializing app...'); // Debug log
-    
     // Inicializar aplicación
     CartManager.loadCart();
     CartManager.updateCartUI();
@@ -620,11 +761,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Configurar navegación
     document.querySelectorAll('[data-page]').forEach(link => {
-        console.log('Setting up navigation for:', link); // Debug log
         link.addEventListener('click', (e) => {
             e.preventDefault();
             const page = link.getAttribute('data-page');
-            console.log('Navigation clicked:', page); // Debug log
             PageManager.showPage(page);
             MobileNavManager.close();
         });
@@ -632,11 +771,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Configurar botón del carrito
     const cartButton = document.querySelector('.cart-button');
-    console.log('Cart button found:', cartButton); // Debug log
     if (cartButton) {
         cartButton.addEventListener('click', (e) => {
             e.preventDefault();
-            console.log('Cart button clicked'); // Debug log
             PageManager.showPage('cart');
         });
     }
