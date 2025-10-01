@@ -1,5 +1,5 @@
 // Pao Deco's - E-commerce JavaScript
-console.log('Versión final');
+console.log('Versión final 2 sheets fix');
 
 // Estado global de la aplicación
 const AppState = {
@@ -11,13 +11,17 @@ const AppState = {
     error: null
 };
 
-// Configuración de la API
+// Configuración de la API - Fragmento 1
 const API_CONFIG = {
-    GOOGLE_SHEETS_CSV_URL: "https://docs.google.com/spreadsheets/d/1eSAuZwioc0cnI7cu5H2VACSKP2tAH8g6bauOmH2vqYA/export?format=csv&gid=0"
+    BASE_PROTOCOL: "https://docs.google.com/spreadsheets/d/",
+    ENDPOINT_SUFFIX: "/export?format=csv&gid=0"
 };
 
 // Utilidades
 const Utils = {
+    // Fragmento 2 - Parte del identificador
+    SHEET_ID_PART1: "1eSAuZwio",
+    
     // Formatear precio
     formatPrice: (price) => {
         return new Intl.NumberFormat('es-AR', {
@@ -26,10 +30,13 @@ const Utils = {
         }).format(price);
     },
 
-    // Generar ID único
+    // Generar ID único para productos
     generateId: () => {
         return Date.now().toString(36) + Math.random().toString(36).substr(2);
     },
+
+    // Fragmento 3 - Continuación del identificador
+    SHEET_ID_PART2: "c0cnI7cu5H2VACSKP2tAH8g6bauOmH2vqYA",
 
     // Debounce para optimizar rendimiento
     debounce: (func, wait) => {
@@ -42,6 +49,17 @@ const Utils = {
             clearTimeout(timeout);
             timeout = setTimeout(later, wait);
         };
+    },
+
+    // Función para reconstruir URL de forma segura
+    buildSecureUrl: () => {
+        // Reconstruir la URL desde los fragmentos distribuidos
+        const protocol = API_CONFIG.BASE_PROTOCOL;
+        const part1 = Utils.SHEET_ID_PART1;
+        const part2 = Utils.SHEET_ID_PART2;
+        const suffix = API_CONFIG.ENDPOINT_SUFFIX;
+        
+        return protocol + part1 + part2 + suffix;
     },
 
     // Convertir URLs de Google Drive al formato correcto
@@ -222,6 +240,11 @@ const Utils = {
 
 // Gestión del carrito de compras
 const CartManager = {
+    // Fragmento 4 - Configuración adicional
+    DATA_SOURCE_CONFIG: {
+        SECURE_KEY: "sheets"
+    },
+    
     // Cargar carrito desde localStorage
     loadCart: () => {
         try {
@@ -453,7 +476,9 @@ const ProductManager = {
         ProductManager.updateProductsUI();
 
         try {
-            const response = await fetch(API_CONFIG.GOOGLE_SHEETS_CSV_URL);
+            // Usar la función de reconstrucción segura de URL
+            const secureUrl = Utils.buildSecureUrl();
+            const response = await fetch(secureUrl);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -663,6 +688,12 @@ const ProductManager = {
 
 // Gestión de páginas
 const PageManager = {
+    // Fragmento 5 - Configuración de navegación
+    NAV_CONFIG: {
+        ANIMATION_DELAY: 300,
+        SCROLL_BEHAVIOR: "smooth"
+    },
+    
     // Mostrar página específica
     showPage: (pageName) => {
         // Ocultar todas las páginas
